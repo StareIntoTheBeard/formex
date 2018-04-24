@@ -112,7 +112,10 @@ defmodule Formex.Validator do
     |> Enum.map(fn {key, suberrors} ->
       suberrors = Enum.map(suberrors, &(translate_error.(&1)))
 
-      {key, suberrors}
+      {key, suberrors
+        |> Enum.sort
+        |> Enum.dedup
+      }
     end)
 
     %{form | errors: errors}
@@ -183,6 +186,9 @@ defmodule Formex.Validator do
       field_errors1 ++ field_errors2
     end)
 
-    %{form | errors: new_errors}
+    %{form | errors: new_errors
+      |> Enum.sort
+      |> Enum.dedup
+    }
   end
 end
